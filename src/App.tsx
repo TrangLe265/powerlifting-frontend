@@ -43,7 +43,11 @@ const Navigation = () => {
   }, []);
 
   return (
-    <NavigationMenu viewport={false} className="flex flex-row">
+    <NavigationMenu
+      viewport={false}
+      className="flex flex-row justify-center items-center w-full align-top"
+      style={{ margin: "0 auto" }}
+    >
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
@@ -52,20 +56,24 @@ const Navigation = () => {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Lifts</NavigationMenuTrigger>
-            <NavigationMenuContent>
-            <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+          <NavigationMenuContent
+            className="absolute left-full top-0 ml-2 w-56 bg-white rounded shadow-lg p-2"
+          >
+            <ul>
               {liftTypes.map((liftType) => (
-              <li key={liftType.id} className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <Link to={`lifts/${liftType.name}`}>
-                {liftType.name.toUpperCase()}
-                  </Link>
-                </NavigationMenuLink>
-                
-              </li>
+                <li key={liftType.id}>
+                  <NavigationMenuLink asChild>
+                    <Link
+                      to={`lifts/${liftType.name}`}
+                      className="block px-4 py-2 text-gray-800 hover:bg-blue-100 rounded transition-colors"
+                    >
+                      {liftType.name}
+                    </Link>
+                  </NavigationMenuLink>
+                </li>
               ))}
             </ul>
-            </NavigationMenuContent>
+          </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
@@ -83,4 +91,4 @@ const Navigation = () => {
   )
 }
 
-export default App; 
+export default App;
