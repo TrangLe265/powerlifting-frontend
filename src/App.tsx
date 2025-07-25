@@ -11,6 +11,7 @@ import Dashboard from './tabs/Dashboard';
 import DOTS from './tabs/DOTS';
 import User from './tabs/User';
 import LiftsByType from './tabs/LiftsByType';
+import { fetchLiftTypes } from './services/fetching';
 import { useEffect, useState } from 'react';
 
 
@@ -26,7 +27,7 @@ function App() {
         />
         <Route path="/user" element={<User />}
         />
-        <Route path="/lifts/:liftName" element={<LiftsByType />}/>
+        <Route path="/lifts/:liftTypeName/:liftTypeId" element={<LiftsByType />}/>
       </Routes>
     </>
   )
@@ -36,10 +37,8 @@ const Navigation = () => {
   const [liftTypes, setLiftTypes] = useState<{id: number, name: string}[]>([]); 
 
   useEffect(() => {
-    fetch('http://localhost:3000/lift-type')
-    .then(res => res.json())
+    fetchLiftTypes()
     .then(data => setLiftTypes(data))
-    .catch(err => console.error(err)); 
   }, []);
 
   return (
@@ -56,24 +55,19 @@ const Navigation = () => {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Lifts</NavigationMenuTrigger>
-          <NavigationMenuContent
-            className="absolute left-full top-0 ml-2 w-56 bg-white rounded shadow-lg p-2"
-          >
+            <NavigationMenuContent className="absolute left-full top-0 ml-2 w-56 bg-white rounded shadow-lg p-2">
             <ul>
               {liftTypes.map((liftType) => (
-                <li key={liftType.id}>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      to={`lifts/${liftType.name}`}
-                      className="block px-4 py-2 text-gray-800 hover:bg-blue-100 rounded transition-colors"
-                    >
-                      {liftType.name}
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
+              <li key={liftType.id} className="row-span-3">
+                <NavigationMenuLink asChild>
+                  <Link to={`lifts/${liftType.name}/${liftType.id}`}>
+                {liftType.name}
+                  </Link>
+                </NavigationMenuLink>
+              </li>
               ))}
             </ul>
-          </NavigationMenuContent>
+            </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
@@ -91,4 +85,4 @@ const Navigation = () => {
   )
 }
 
-export default App;
+export default App; 
