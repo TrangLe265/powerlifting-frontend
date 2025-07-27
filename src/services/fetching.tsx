@@ -1,3 +1,5 @@
+import type { Lift } from "@/types/Lift";
+
 const baseUrl = import.meta.env.VITE_BASE_URL; 
 //.env file needs to be in the same level as vite.config
 
@@ -7,7 +9,7 @@ export async function fetchLiftTypes(){
         
         const response = await fetch(`${baseUrl}lift-type`);
 
-        if (!response.ok) throw new Error('Network failed to response')
+        if (!response.ok) throw new Error(`Response status: ${response.status}`)
         return await response.json(); 
     } catch(err){
         console.error(err); 
@@ -19,11 +21,67 @@ export async function fetchLiftsByType(liftTypeId: number, userId: string){
     try {
         const response = await fetch(`${baseUrl}lift/user/${userId}/${liftTypeId}`); 
     
-        if (!response.ok) throw new Error('Network failed to response')
+        if (!response.ok) throw new Error(`Response status: ${response.status}`)
         return await response.json(); 
 
     } catch(err){
         console.error(err); 
         return []; 
+    }
+}
+
+export async function fetchLiftById(liftId: number){
+    try {
+        const response = await fetch(`${baseUrl}lift/${liftId}`);
+
+        if (!response.ok) throw new Error(`Response status: ${response.status}`)
+        return await response.json(); 
+    
+    } catch (err){
+        console.error(err); 
+        return []; 
+    }
+}
+
+export async function deleteLiftById(liftId: number){
+    try {
+        const response = await fetch(`${baseUrl}lift/${liftId}`, { method: "DELETE" });
+
+        if (!response.ok) throw new Error(`Response status: ${response.status}`);
+        return await response.json();
+    } catch(err){
+        console.error(err);
+        return 'Delete failed';
+    }
+}
+
+export async function addLift(lift: Omit<Lift, "id">){
+    try{
+        const response = await fetch(`${baseUrl}lift`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(lift)
+        });
+        if (!response.ok) throw new Error(`Response status: ${response.status}`);
+        return await response.json();
+    } catch(err){
+        console.error(err); 
+        return 'Fail to add new lift';
+    }
+}
+
+//TODO: add PUT method for lift
+
+export async function fetchClassifications(){
+    try {
+        const response = await fetch(`${baseUrl}classification`); 
+        if (!response.ok) throw new Error(`Response status: ${response.status}`)
+        return await response.json(); 
+
+    } catch(err){
+        console.error(err); 
+        return 'Fail to fetch result';
     }
 }
