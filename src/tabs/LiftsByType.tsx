@@ -25,7 +25,7 @@ export default function LiftsByType() {
             .then(data => setLifts(data));
         }
 
-        deleteLiftById(24); 
+       
         
     }, [liftName, liftTypeId])
 
